@@ -29,7 +29,7 @@ class SearchesController < ApplicationController
       respond_to do |format|
         if @search.save
           #format.html { redirect_to @search, notice: 'Search was successfully created.' }
-          #format.json { render :show, status: :created, location: @search }
+          #format.json
           
             format.js
             
