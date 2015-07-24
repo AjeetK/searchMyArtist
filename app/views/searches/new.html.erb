@@ -42,20 +42,26 @@
                        method: "POST",
                        url: "http://ws.audioscrobbler.com/2.0/?method=artist.search&artist="+artist+"&api_key=bc4920f2e3ccd2db3214cc9fd74da346&format=json",
                        crossDomain: true,
-                       data: "",
+                   
                        dataType: "jsonp",
                        xhrFields: {
                           withCredentials: true
                         },
                         success: function(data){
                         	  alert("inside success");
-                              console.log(data)  //returns Object
-                              console.log(data.title)  //returns appropriate title
+                              console.log(data);  //returns Object
+                              console.log(data.results.artistmatches.artist[name]);  //returns appropriate title
+                              $.each(data.results.artistmatches.artist , function(){
+
+                                 $('#search_result').append('<p>'+this["name"]+'</p>');
+
+                              });
 
                               //edit innerHTML of basic_modal
-                                $('#search_result').html(
+                                $('#search_result').append(
                                   "hurrey!!"
                                  );
+                                $('#error').html('Error Code: ' + code + ', Error Message: ' + message);
 
                               //load modal
                                /* $('.search_result').modal({
@@ -73,3 +79,4 @@
 <div id="search_result">
 	Hello
 </div>
+<div id="error"></div>
