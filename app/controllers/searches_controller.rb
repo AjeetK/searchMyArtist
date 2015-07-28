@@ -26,19 +26,19 @@ class SearchesController < ApplicationController
   def create
     @search = Search.new(search_params)
 
-      respond_to do |format|
-        if @search.save
+      #respond_to do |format|
+        @search.save
           #format.html { redirect_to @search, notice: 'Search was successfully created.' }
           #format.json
-          
-            format.js
+            render :nothing => true
+            #format.js
             
         
-        else
-          format.html { render :new }
-          format.json { render json: @search.errors, status: :unprocessable_entity }
-        end
-      end
+        #else
+          #format.html { render :new }
+          #format.json { render json: @search.errors, status: :unprocessable_entity }
+        #end
+      #end
   end
 
   # PATCH/PUT /searches/1
