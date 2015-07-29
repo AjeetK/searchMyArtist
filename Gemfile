@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+# gem for bootstrap
+# gem 'bootstrap'
 # Use Devise gem for login and signup
 gem 'devise'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

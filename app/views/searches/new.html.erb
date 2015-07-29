@@ -1,4 +1,5 @@
-<h1>New Search</h1>
+
+<%= link_to 'Back', searches_path, :class => 'col-md-offset-1' %>
 <%= form_for @search, :remote => true do |f| %>
   <% if @search.errors.any? %>
     <div id="error_explanation">
@@ -12,9 +13,13 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :search_item %><br>
-    <%= f.text_field :search_item %>
+  <div class="form-group">
+    <span class="col-md-offset-1 col-md-1">
+      <%= f.label :search_item, "Search Artist", :class => 'label-control' %><br>
+    </span>
+    <span class="col-md-5">
+      <%= f.text_field :search_item, :class => 'form-control' %>
+    </span>
   </div>
 
   <!-- adding hidden field for user_id as foreign key -->
@@ -24,7 +29,7 @@
     <%= f.submit %>
   </div> -->
   <div class="actions">
-    <button >Send</button>
+    <button class="btn btn-primary" >Send</button>
   </div>
 <% end %>
 
@@ -33,7 +38,7 @@
     $(document).ready(function() {
         $('button').click(function() {
             alert("Requesting");
-            $('#search_result').html('<p>Searching...</p>');            
+            // $('#search_result').html('<p>Searching...</p>');            
             var artist = $("#search_search_item").val();
              $.ajax({
                        method: "POST",
@@ -56,25 +61,22 @@
               function displayArtistDetails(data){
                             alert("inside success");
                               console.log(data);  //returns Object
-                              console.log(data.results.artistmatches.artist["name"]);  //returns appropriate title
+                              console.log(data.results.artistmatches.artist[0].name);  //returns appropriate title
                               //$.each(data.results.artistmatches.artist , function(){
 
-                              $('#search_result').append('<p>'+data.results.artistmatches.artist[0]["name"]+'</p><br>');
+                              $('#search_result').append('<p><a href="'+data.results.artistmatches.artist[0]["url"]+'">'+data.results.artistmatches.artist[0]["name"]+'</a></p>');
                               $('#search_result').append('<p>'+data.results.artistmatches.artist[0]["listeners"]+'</p><br>');
-                              $('#artist_url').html('<a href="'+data.results.artistmatches.artist[0]["url"]+'"</a><br>');
-                              $('#image1').html('<img src="'+data.results.artistmatches.artist[0].image[0]["#text"]+'"></img><br>');
+                              $('#image1').html('<img src="'+data.results.artistmatches.artist[0].image[2]["#text"]+'"></img><br>');
                               //});
 
                               //edit innerHTML of basic_modal
-                                $('#search_result').append(
-                                  "hurrey!!"
-                                 );
+                              
                                 
 
                                 //After success send a request to fetch similar artit
                                 $.ajax({
                                          method: "POST",
-                                         url: "http://ws.audioscrobbler.com/2.0/?method=artist.getsimilar&artist="+artist+"r&api_key=bc4920f2e3ccd2db3214cc9fd74da346&format=json",
+                                         url: "http://ws.audioscrobbler.com/2.0/?method=artist.getsimilar&artist="+artist+"&api_key=bc4920f2e3ccd2db3214cc9fd74da346&format=json",
                                          crossDomain: true,
                                          timeout: 10000, 
                                          dataType: "jsonp",
@@ -96,18 +98,19 @@
                                      console.log("data.similarartists");
                                      console.log(data.similarartists);
                                      console.log("data.similarartists.artist");
-                                     console.log(data.similarartists.artist[0]["name"]);
-                                      $('#similar_aritsts').append('<p>these are the names'+data.similarartists["aritst"]+'</p>');
+                                     console.log(data.similarartists.artist[0].name);
+                                     var i = 0;
                                      $.each(data.similarartists.artist, function(){
-                                          $('#similar_aritsts').append('<p>Hello</p><br>');
-                                          console.log(this["name"])
+                                          // $('#similar_aritsts').append('<p>Hello</p><br>');
+                                          console.log(this["name"]);
                                           $('#similar_aritsts').append('<p>'+this.name+'</p><br>');
+                                          i = i + 1;
+                                          if (i === 6) {return false;}
+                                          console.log(i);              
                                       });
 
                                       //edit innerHTML of basic_modal
-                                      $('#search_result').append(
-                                        "hurrey!!"
-                                       );
+                                     
                                      
                                
                                    } //end success: function(result)
@@ -116,14 +119,11 @@
     });
 </script>
 
-<%= link_to 'Back', searches_path %>
 
-<div id="search_result">
-	Hello
-</div>
-<div id="artist_url">Link To Artist</div>
-<div id="image1">Image Here</div>
-<div id="image2">Image Here</div>
-<div id="similar_aritsts">similar artist</div>
+<div id="search_result" class="col-md-offset-2"></div>
+<div id="artist_url" class="col-md-offset-2"></div>
+<div id="image1" class="col-md-offset-2"></div>
+<p class="col-md-offset-1"><b>Similar artists:</b></p><br>
+<div id="similar_aritsts" class="col-md-offset-2"><br></div>
 
 <div id="error"></div>
